@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Azazazaz</title>
+</head>
+
+<body>
+    <v-app id="app">
+        <v-app-bar app color="white" flat>
+            <v-container class="py-0 fill-height">
+                <v-avatar class="mr-10" color="grey darken-1" size="32"></v-avatar>
+
+                <!-- <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                        Open Dialog
+                    </v-btn>
+                </template> -->
+
+                <v-btn text @click="createDialog=true">
+                    Create bucket
+
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn text width="400" v-if="uploadStatus != 0" @click="uploadSnackbar=true">
+                    <v-progress-linear v-model="uploadStatus"></v-progress-linear>
+                </v-btn>
+
+                <v-snackbar v-model="uploadSnackbar" light  right top app>
+                    <v-row>
+                        <v-col>filename</v-col>
+                        <v-col>bucketname</v-col>
+                        <v-col><v-progress-circular value="50"></v-progress-circular value="50"></v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>filename</v-col>
+                        <v-col>bucketname</v-col>
+                        <v-col><v-progress-circular value="50"></v-progress-circular value="50"></v-col>
+                    </v-row>
+                    <template v-slot:action="{ attrs }" >
+                        <v-btn color="blue" text v-bind="attrs" @click="uploadSnackbar=false" bottom>Close</v-btn>
+                    </template>
+                </v-snackbar>
+                <v-btn text @click="uploadDialog=true" v-if="bucketName">
+                    Upload
+                </v-btn>
+
+                </v-btn>
+                <v-btn v-if="bucketName" class="outlined x-small elevation-0 white" @click="RemoveBucket">
+                    {{bucketName}}
+                    <span class="material-icons">delete</span>
+                </v-btn>
+                <!-- <v-responsive max-width="260">
+                            <v-text-field dense flat hide-details rounded solo-inverted></v-text-field>
+                        </v-responsive> -->
+            </v-container>
+        </v-app-bar>
+
+        <v-main class="grey lighten-3">
+            <v-container>
+                <v-row>
+                    <v-col cols="2">
+                        <v-sheet rounded="lg">
+                            <v-list color="transparent">
+                                <v-list-item>
+                                    <v-list-item-content>
+                                        <v-list-item-title>Avaible buckets</v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                                <v-divider class="my-2"></v-divider>
+                                <v-list-item v-for="b in bucketList" :key="b" @click="bucketName = b, GetFileList()">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            {{b}}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+
+                            </v-list>
+                        </v-sheet>
+                    </v-col>
+
+                    <v-col>
+                        <v-sheet min-height="70vh" rounded="lg" color="grey lighten-5">
+                            <br>
+                            <v-container>
+
+                                <v-row v-if="!files">
+                                    <v-col cols="12">
+                                        <v-container class="text-center">
+                                            <strong class="text-h5">No files</strong>
+                                        </v-container>
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="files" v-for="f in files">
+                                    <v-col cols="12">
+
+                                        <v-card tile text class="grey lighten-5" flat>
+                                            <v-card-title>
+                                                {{f.name}}
+                                            </v-card-title>
+                                            <v-card-text>
+                                                {{f}}
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn>
+                                                    <span class="material-icons"
+                                                        @click="RemoveFile(f.name)">delete</span>
+                                                </v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                        <v-divider></v-divider>
+
+                                    </v-col>
+                                </v-row>
+
+                            </v-container>
+                        </v-sheet>
+                    </v-col>
+                </v-row>
+            </v-container>
+
+           
+
+            <v-row justify="center">
+                <v-dialog v-model="createDialog" persistent max-width="600px">
+                    <v-card>
+                        <v-card-title>
+                            <span class="text-h5">Create bucket</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-text-field label="Bucket name" v-model="bucket.bucketName"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-text-field label="Bucket region" v-model="bucket.bucketRegion">
+                                        </v-text-field>
+                                    </v-col>
+                                    <v-switch v-model="bucket.objectLocking"
+                                        :label="`Object locking: ${bucket.objectLocking.toString()}`">
+                                    </v-switch>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="createDialog = false">
+                                Close
+                            </v-btn>
+                            <v-btn color="blue darken-1" text @click="CreateBucket">
+                                Create
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+                <v-dialog v-model="uploadDialog" persistent max-width="600px">
+                    <v-card>
+                        <v-card-title>
+                            <span class="text-h5">Upload file</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-file-input multiple label="Choose file to upload" ref="file" type="file" id="file"
+                                            v-model="uploadFiles" @change="HandleFileChanged" value="file">
+                                        </v-file-input>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="uploadDialog = false">
+                                Close
+                            </v-btn>
+                            <v-btn color="blue darken-1" text @click="HandleFileUpload">
+                                Upload
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+
+        </v-main>
+    </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script src="main.js" type="text/javascript"></script>
+</body>
+
+</html>
