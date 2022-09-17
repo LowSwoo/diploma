@@ -77,7 +77,7 @@ func GetFileLink(bucketName string, fileName string) *url.URL {
 	if err != nil {
 		log.Default().Println(err)
 	}
-	log.Default().Println(url)
+	// log.Default().Println(url)
 	return url
 }
 
