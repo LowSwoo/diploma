@@ -97,11 +97,13 @@ new Vue({
         this.bucketName = null
     },
     RemoveFile: function(filename) {
-      this.$http.get("localhost:8080/api/file/remove", {params: {
+      this.$http.get("http://localhost:8080/api/file/remove", {params: {
         fileName: filename,
         bucketName: this.bucketName,
-      }})
-      this.GetFileList()
+      }}).then(response => {
+        console.log(response.data)
+      })
+      // this.GetFileList()
     }
   },
   vuetify: new Vuetify(),
