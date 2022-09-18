@@ -3,7 +3,7 @@ const server = {
   host: "localhost",
   port: "8080"
 }
-const server_url = server.scheme + "://" + host + ":" + port
+const server_url = server.scheme + "://" + server.host + ":" + server.port
 new Vue({
   el: "#app",
   data: {
@@ -13,6 +13,7 @@ new Vue({
       objectLocking: false,
     },
     uploadStatus: 40,
+    uploadFilesProgress: [],
     bucketName: undefined,
     bucketList: [],
     createDialog: false,
@@ -80,7 +81,7 @@ new Vue({
       // this.bucket = null
     },
     async HandleFileUpload() {
-      this.fileLinks.forEach((x) => {
+      await this.fileLinks.forEach((x) => {
         let arr = [];
         let formdata = new FormData();
 

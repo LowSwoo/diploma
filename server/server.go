@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,7 @@ func Run() {
 	// 		ctx.File("/front/dist/index.html")
 	// 	}
 	// })
+	router.Use(static.Serve("/", static.LocalFile("frontend", true)))
 	initializeRoutes()
 	router.Run("localhost:8080")
 }
