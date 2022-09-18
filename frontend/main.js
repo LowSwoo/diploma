@@ -1,3 +1,9 @@
+const server = {
+  scheme: "http",
+  host: "localhost",
+  port: "8080"
+}
+const server_url = server.scheme + "://" + host + ":" + port
 new Vue({
   el: "#app",
   data: {
@@ -18,7 +24,7 @@ new Vue({
     fileLinks: [],
   },
   created() {
-    this.$http.get("http://localhost:8080/api/bucket/list").then((response) => {
+    this.$http.get(server_url + "/api/bucket/list").then((response) => {
       this.bucketList = response.data;
       console.log(this.bucketList);
       this.bucketName = this.bucketList[0];
@@ -29,7 +35,7 @@ new Vue({
   methods: {
     GetFileList() {
       this.$http
-        .get("http://localhost:8080/api/file/list", {
+        .get(server_url + "/api/file/list", {
           params: { bucketName: this.bucketName },
         })
         .then(
@@ -44,7 +50,7 @@ new Vue({
     },
     HandleFileChanged() {
       this.$http
-        .post("http://localhost:8080/api/file/upload", {
+        .post(server_url + "/api/file/upload", {
           bucketName: this.bucketName,
           fileName: this.uploadFiles.map((el) => el.name),
         })
@@ -57,7 +63,7 @@ new Vue({
     },
     CreateBucket: function () {
       this.$http
-        .post("http://localhost:8080/api/bucket/create", {
+        .post(server_url + "/api/bucket/create", {
           bucketName: this.bucket.bucketName,
           bucketRegion: this.bucket.bucketRegion,
           objectLocking: this.bucket.objectLocking,
@@ -99,7 +105,7 @@ new Vue({
     RemoveBucket: function () {
       console.log(this.bucketName);
       this.$http
-        .post("http://localhost:8080/api/bucket/remove", {
+        .post(server_url + "/api/bucket/remove", {
           bucketName: this.bucketName,
         })
         .then(
@@ -114,7 +120,7 @@ new Vue({
     },
     RemoveFile: function (filename) {
       this.$http
-        .get("http://localhost:8080/api/file/remove", {
+        .get(server_url + "/api/file/remove", {
           params: {
             fileName: filename,
             bucketName: this.bucketName,
