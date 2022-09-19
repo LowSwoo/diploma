@@ -1,9 +1,9 @@
 const server = {
   scheme: "http",
   host: "localhost",
-  port: "8080"
-}
-const server_url = server.scheme + "://" + server.host + ":" + server.port
+  port: "8080",
+};
+const server_url = server.scheme + "://" + server.host + ":" + server.port;
 new Vue({
   el: "#app",
   data: {
@@ -12,8 +12,7 @@ new Vue({
       bucketRegion: "",
       objectLocking: false,
     },
-    uploadStatus: 40,
-    uploadFilesProgress: [],
+
     bucketName: undefined,
     bucketList: [],
     createDialog: false,
@@ -23,6 +22,7 @@ new Vue({
     files: [],
     file: null,
     fileLinks: [],
+    uploadFilesProgress: [],
   },
   created() {
     this.$http.get(server_url + "/api/bucket/list").then((response) => {
@@ -81,27 +81,41 @@ new Vue({
       // this.bucket = null
     },
     async HandleFileUpload() {
-      await this.fileLinks.forEach((x) => {
-        let arr = [];
+      await this.fileLinks.forEach((fileLink) => {
+        let tempProcess = 0;
         let formdata = new FormData();
-
-        this.uploadFiles.find((y) => {
-          if (x["fileName"] == y["name"]) {
-            formdata.append("data", y);
+        this.uploadFiles.find((upFile) => {
+          if (fileLink["fileName"] == upFile["name"]) {
+            formdata.append("data", upFile);
           }
         });
-
-        this.$http.put(x["url"], formdata)
+        this.uploadFilesProgress.push({
+          fileName: fileLink["fileName"],
+          bucketName: this.bucketName,
+          uploaded: 0,
+        });
+        this.$http
+          .put(fileLink["url"], formdata, {
+            uploadProgress: (upProgress) => {
+              this.uploadFilesProgress.forEach((uploadFile)=>{
+                if (uploadFile["fileName"]==fileLink["fileName"]){
+                  uploadFile['uploaded'] = Math.round(
+                    (upProgress.loaded * 100) / upProgress.total
+                    )
+                    // console.log(uploadFile['fileName'], ":", uploadFile['uploaded']);
+                }
+              })
+            },
+          })
+          .then(() => {
+            console.log("File", fileLink["fileName"], "is uploaded");
+            this.uploadFilesProgress.splice(this.uploadFilesProgress.indexOf(fileLink["fileName"]),1)
+            this.GetFileList()
+          });
       });
-      // formdata.append("data", this.uploadFiles);
-      // console.log(formdata)
       this.uploadDialog = false;
-      // this.$http.put(this.fileLink, formdata, {
-      //   uploadProgress: e => this.uploadStatus = Math.round(e.loaded * 100 / e.total)
-      // })
       this.uploadFiles = undefined;
-      this.uploadStatus = 0;
-      this.GetFileList();
+      console.log("test", this.uploadFilesProgress)
     },
     RemoveBucket: function () {
       console.log(this.bucketName);
@@ -119,8 +133,8 @@ new Vue({
         );
       this.bucketName = null;
     },
-    RemoveFile: function (filename) {
-      this.$http
+    RemoveFile: async function (filename) {
+      await this.$http
         .get(server_url + "/api/file/remove", {
           params: {
             fileName: filename,
@@ -128,10 +142,9 @@ new Vue({
           },
         })
         .then((response) => {
-          
-          this.files = response.data
+          this.files = response.data;
         });
-      // this.GetFileList()
+      this.GetFileList()
     },
   },
   vuetify: new Vuetify(),
