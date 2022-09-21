@@ -11,13 +11,7 @@ var router *gin.Engine
 
 func Run() {
 	router = gin.Default()
-	// router.Use(static.Serve("/", static.LocalFile("front/dist", true)))
-	// router.NoRoute(func(ctx *gin.Context) {
-	// 	if !strings.HasPrefix(ctx.Request.RequestURI, "/api") {
-	// 		ctx.File("/front/dist/index.html")
-	// 	}
-	// })
-	router.Use(static.Serve("/", static.LocalFile("frontend", true)))
+	router.Use(static.Serve("/", static.LocalFile("frontend", false)))
 	initializeRoutes()
 	router.Run("localhost:8080")
 }
