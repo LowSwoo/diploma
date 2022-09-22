@@ -13,7 +13,7 @@
                   </v-col>
                   <v-col class="text-right">
                     <v-btn icon color="light-blue darken-2"><v-icon>mdi-download</v-icon></v-btn>
-                    <v-btn icon color="red darken-4"><v-icon>mdi-delete-forever</v-icon></v-btn>
+                    <v-btn icon color="red darken-4" @click="RemoveFile(item.name)"><v-icon>mdi-delete-forever</v-icon></v-btn>
                   </v-col>
                 </v-row>
               </v-list-item-content>
@@ -34,6 +34,19 @@ export default {
     selectedItem: null,
   }),
   methods: {
+    RemoveFile: async function(filename) {
+      await this.$http
+        .get("http://localhost:8080" + "/api/file/remove", {
+          params: {
+            fileName: filename,
+            bucketName: this.bucketName,
+          },
+        })
+        .then((response) => {
+          this.files = response.data;
+        });
+      this.GetFileList()
+    },
     GetFileInfo() {
       console.log(this.files.find((x)=>{return x.name == this.currentFile}))
     },
