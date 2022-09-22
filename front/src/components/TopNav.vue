@@ -19,10 +19,10 @@
         </v-btn> -->
       <v-btn text> Загузить данные </v-btn>
 
-      <!-- <v-btn v-if="bucketName" class="outlined x-small elevation-0 white" @click="RemoveBucket">
+      <v-btn v-if="bucketName" class="outlined x-small elevation-0 " @click="RemoveBucket">
                     {{bucketName}}
-                    <span class="material-icons">delete</span>
-        </v-btn> -->
+                    <v-icon color="red" class="mx-2">mdi-close-circle</v-icon>
+        </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
     </v-container>
   </v-app-bar>
@@ -32,9 +32,26 @@
   export default {
     data: () => ({
       showCreateDialog: false,
+      bucketName: '',
     }),
     methods: {
-
+      RemoveBucket() {
+        this.$http
+        .post("http://localhost:8080" + "/api/bucket/remove", {
+          bucketName: this.bucketName,
+        })
+        .then(
+          (response) => {
+            this.$root.$emit("UpdateBucketList")
+          },
+          (response) => {
+            console.log("err:", response);
+          }
+        );
+      }
+    },
+    mounted() {
+      this.$root.$on('ChangeCurrentBucket', (bucketName) => this.bucketName = bucketName)
     },
     components: { CreateBucket },
   };

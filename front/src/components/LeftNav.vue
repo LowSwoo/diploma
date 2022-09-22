@@ -8,7 +8,7 @@
         <v-divider class="my-2"></v-divider>
 
         <v-list-item v-for="bucket in bucketList" :key="bucket" link>
-          <v-list-item-content>
+          <v-list-item-content v-on:click="$root.$emit('ChangeCurrentBucket', bucket)">
             <v-list-item-title> {{ bucket }} </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -25,12 +25,22 @@ export default {
       bucketList: [],
       bucketName: '',
     }),
-    created() {
-      this.$http.get("http://localhost:8080/api/bucket/list").then((resp) => {
+    methods: {
+      GetBucketList() {
+        this.$http.get("http://localhost:8080/api/bucket/list").then((resp) => {
         this.bucketList = resp.data;
         this.bucketName = this.bucketList[0]
+        this.$root.$emit('ChangeCurrentBucket', this.bucketName)
       })
+      }
     },
+    created() {
+      this.GetBucketList()
+    },
+    mounted() {
+      this.$root.$on('UpdateBucketList', () => this.GetBucketList())
+    },
+
 }
 
 

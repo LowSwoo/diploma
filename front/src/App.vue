@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <TopNav></TopNav>
-    <v-main class="">
+    <v-main>
       <MainView></MainView>
     </v-main>
     <!-- <Dialogs></Dialogs> -->

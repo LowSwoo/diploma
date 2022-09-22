@@ -34,7 +34,7 @@
         >
           Close
         </v-btn>
-        <v-btn color="blue darken-1" text @click="CreateBucketf"> Create </v-btn>
+        <v-btn color="blue darken-1" text @click="CreateBucket"> Create </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -52,7 +52,7 @@ export default {
     },
   }),
   methods: {
-    CreateBucketf() {
+    CreateBucket() {
       this.$http
         .post("http://localhost:8080" + "/api/bucket/create", {
           bucketName: this.bucket.name,
@@ -60,8 +60,8 @@ export default {
           objectLocking: this.bucket.objectLocking,
         })
         .then(
-          (response) => {
-             console.log(response.data)
+          () => {
+             this.$root.$emit('UpdateBucketList')
           },
           (response) => {
             console.log("err:", response);
