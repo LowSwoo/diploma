@@ -1,16 +1,17 @@
 <template>
   <v-app>
     <TopNav></TopNav>
+    <LeftNav></LeftNav>
     <v-main>
-      <MainView></MainView>
+      <MainSheet></MainSheet>
     </v-main>
-    <!-- <Dialogs></Dialogs> -->
   </v-app>
 </template>
 
 <script>
-import MainView from "./views/MainView.vue";
 import TopNav from "./components/TopNav.vue";
+import LeftNav from "./components/LeftNav.vue";
+import MainSheet from "./components/MainSheet.vue";
 // import Dialogs from "./components/Dialogs.vue";
 
 export default {
@@ -18,6 +19,6 @@ export default {
   data: () => ({
     //
   }),
-  components: { MainView, TopNav,  },
+  components: { TopNav, LeftNav, MainSheet },
 };
 </script>

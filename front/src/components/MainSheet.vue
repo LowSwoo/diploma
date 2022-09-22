@@ -2,6 +2,7 @@
   <v-col>
     <v-sheet min-height="70vh" rounded="lg" elevation="4">
       <br />
+      <h2 class="text-center" v-if="files.length == 0">Для данного расчёта нет данных</h2>
       <v-card class="mx-auto px-1" flat  tile>
         <v-list >
           <v-list-item-group v-model="selectedItem" color="primary">

@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app elevation="2">
+  <v-app-bar app elevation="2" color="blue-grey darken-4">
     <v-container class="py-0 fill-height">
       <v-avatar class="mr-10" color="grey darken-3" size="32">L</v-avatar>
 
@@ -10,7 +10,7 @@
       <v-btn width="400" text>
         <v-progress-linear value="40"></v-progress-linear>
       </v-btn>
-      <v-btn icon @click="showUploadDialog = true">
+      <v-btn v-if="bucketName" icon @click="showUploadDialog = true">
         <v-icon>mdi-cloud-upload</v-icon>
       </v-btn>
 
