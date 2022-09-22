@@ -17,11 +17,13 @@
                     {{bucketName}}
                     <span class="material-icons">delete</span>
         </v-btn> -->
-      <v-btn text> Загузить данные </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-cloud-upload</v-icon>
+      </v-btn>
 
-      <v-btn v-if="bucketName" class="outlined x-small elevation-0 " @click="RemoveBucket">
+      <v-btn v-if="bucketName" class="outlined x-small elevation-0 " @click="RemoveBucket" text>
                     {{bucketName}}
-                    <v-icon color="red" class="mx-2">mdi-close-circle</v-icon>
+                    <v-icon color="red darken-4" class="mx-2">mdi-delete-forever</v-icon>
         </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
     </v-container>

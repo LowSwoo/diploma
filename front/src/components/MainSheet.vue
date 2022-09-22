@@ -2,26 +2,24 @@
   <v-col>
     <v-sheet min-height="70vh" rounded="lg" elevation="4">
       <br />
-      <v-card v-for="file in files" tile class="mx-auto">
-        <v-list>
-          <v-list-item-group color="primary">
-
-            <v-list-item>
-              <v-list-item-content>
+      <v-card class="mx-auto px-1" flat  tile>
+        <v-list >
+          <v-list-item-group v-model="selectedItem" color="primary">
+            <v-list-item v-for="(item, i) in files" :key="i">
+              <v-list-item-content v-on:click="currentFile = item.name; GetFileInfo()">
                 <v-row>
-                <v-col cols="11">
-                  <v-list-item-title>{{file.name}}</v-list-item-title>
-                </v-col>
-                <v-col class="text-right">
-                  <v-icon class="mx-4">mdi-download</v-icon>
-                  <v-icon color="red">mdi-close-circle</v-icon>
-                </v-col>
-              </v-row>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
+                  <v-col cols="11">
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                  </v-col>
+                  <v-col class="text-right">
+                    <v-btn icon color="light-blue darken-2"><v-icon>mdi-download</v-icon></v-btn>
+                    <v-btn icon color="red darken-4"><v-icon>mdi-delete-forever</v-icon></v-btn>
+                  </v-col>
+                </v-row>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
         </v-list>
-
       </v-card>
     </v-sheet>
   </v-col>
@@ -31,10 +29,14 @@ export default {
   name: "MainSheet",
   data: () => ({
     bucketName: "",
+    currentFile: "",
     files: [],
-    selectedFile: '',
+    selectedItem: null,
   }),
   methods: {
+    GetFileInfo() {
+      console.log(this.files.find((x)=>{return x.name == this.currentFile}))
+    },
     GetFileList() {
       this.$http
         .get("http://localhost:8080" + "/api/file/list", {
