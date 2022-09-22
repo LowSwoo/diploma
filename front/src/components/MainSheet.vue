@@ -72,6 +72,7 @@ export default {
       this.bucketName = bucketName;
       this.GetFileList();
     });
+    this.$root.$on("CheckFilesUpdates", () => {this.GetFileList()})
   },
 };
 </script>

@@ -7,17 +7,10 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-btn text width="400" v-if="uploadFilesProgress.length != 0" @click="uploadSnackbar=true">
-          <v-progress-linear v-bind:value="uploadFilesProgress.reduce((sum,elem)=>{return sum + elem.uploaded},0)/uploadFilesProgress.length"></v-progress-linear>
-        </v-btn> -->
       <v-btn width="400" text>
         <v-progress-linear value="40"></v-progress-linear>
       </v-btn>
-      <!-- <v-btn v-if="bucketName" class="outlined x-small elevation-0 white" @click="RemoveBucket">
-                    {{bucketName}}
-                    <span class="material-icons">delete</span>
-        </v-btn> -->
-      <v-btn icon>
+      <v-btn icon @click="showUploadDialog = true">
         <v-icon>mdi-cloud-upload</v-icon>
       </v-btn>
 
@@ -26,14 +19,17 @@
                     <v-icon color="red darken-4" class="mx-2">mdi-delete-forever</v-icon>
         </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
+      <UploadFile :bucketName="bucketName" :showUploadDialog="showUploadDialog" v-on:CloseUploadDialog="showUploadDialog = false"></UploadFile>
     </v-container>
   </v-app-bar>
 </template>
 <script>
   import CreateBucket from "./dialogs/CreateBucket.vue";
+import UploadFile from "./dialogs/UploadFile.vue";
   export default {
     data: () => ({
       showCreateDialog: false,
+      showUploadDialog: false,
       bucketName: '',
     }),
     methods: {
@@ -55,6 +51,6 @@
     mounted() {
       this.$root.$on('ChangeCurrentBucket', (bucketName) => this.bucketName = bucketName)
     },
-    components: { CreateBucket },
+    components: { CreateBucket, UploadFile },
   };
 </script>
