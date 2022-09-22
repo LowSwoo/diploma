@@ -2,6 +2,7 @@
   <v-app>
     <TopNav></TopNav>
     <LeftNav></LeftNav>
+    <!-- <Rightbar></Rightbar> -->
     <v-main>
       <MainSheet></MainSheet>
     </v-main>
@@ -12,6 +13,7 @@
 import TopNav from "./components/TopNav.vue";
 import LeftNav from "./components/LeftNav.vue";
 import MainSheet from "./components/MainSheet.vue";
+import Rightbar from "./components/Rightbar.vue";
 // import Dialogs from "./components/Dialogs.vue";
 
 export default {
@@ -19,6 +21,6 @@ export default {
   data: () => ({
     //
   }),
-  components: { TopNav, LeftNav, MainSheet },
+  components: { TopNav, LeftNav, MainSheet, Rightbar },
 };
 </script>
