@@ -22,12 +22,12 @@ func Login() (*minio.Client, context.Context) {
 		Secure: data.UseSSL,
 	})
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("КАВО БЛЯТЬ")
 	}
 	return minioClient, ctx
 }
 
-func GetBucketList() []string {
+func GetBucketListNames() []string {
 	client, ctx := Login()
 	l, err := client.ListBuckets(ctx)
 	if err != nil {
@@ -42,16 +42,8 @@ func GetBucketList() []string {
 
 func CreateBucket(bucket *models.Bucket) error {
 	client, ctx := Login()
-	ex, err := client.BucketExists(ctx, bucket.BucketName)
-	if err != nil {
-		log.Default().Println("err != nil")
-		return err
-	}
-	if ex == true {
-		return errors.New("Bucket already exist")
-	}
-	log.Default().Println("Creating bucket with name", bucket.BucketName)
-	err = client.MakeBucket(ctx, bucket.BucketName, minio.MakeBucketOptions{
+	log.Default().Println("Creating bucket with name", bucket.HashName)
+	err := client.MakeBucket(ctx, bucket.HashName, minio.MakeBucketOptions{
 		Region:        bucket.BucketRegion,
 		ObjectLocking: bucket.ObjectLocking,
 	})
@@ -65,10 +57,9 @@ func RemoveBucket(bucketName string) error {
 		return err
 	}
 	if ex == false {
-		return errors.New("Bucket doesn't exist")
+		return errors.New("Bucket doesn't exist | RemoveBucket")
 	}
-	err = client.RemoveBucket(ctx, bucketName)
-	return err
+	return client.RemoveBucket(ctx, bucketName)
 }
 
 func GetFileLink(bucketName string, fileName string) *url.URL {

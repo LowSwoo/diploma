@@ -2,18 +2,27 @@ package server
 
 import (
 	"log"
-	minioServer "lowswoo/minio-server"
+	"lowswoo/db"
 	"lowswoo/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+// THIS
 func createBucket(c *gin.Context) {
+
 	bucket := models.Bucket{}
 	c.BindJSON(&bucket)
-	minioServer.CreateBucket(&bucket)
-	c.JSON(http.StatusOK, minioServer.GetBucketList())
+
+	err := db.CreateBucket(&bucket)
+	if err != nil {
+		c.JSON(http.StatusNotFound, bucket)
+		log.Fatal(err)
+	} else {
+		c.JSON(http.StatusOK, db.GetBucketListNames())
+
+	}
 
 }
 
@@ -22,29 +31,19 @@ func removeBucket(c *gin.Context) {
 		BucketName string `json:"bucketName"`
 	}{}
 	c.BindJSON(&bucket)
-	err := minioServer.RemoveBucket(bucket.BucketName)
+	err := db.RemoveBucket(bucket.BucketName)
 	if err != nil {
 		log.Default().Println(err)
 	}
-	c.JSON(http.StatusOK, minioServer.GetBucketList())
+	c.JSON(http.StatusOK, db.GetBucketListNames())
 }
 
 func uploadFile(c *gin.Context) {
-	type Link struct {
-		FileName string `json:"fileName"`
-		Url      string `json:"url"`
-	}
-
-	file := struct {
-		BucketName string   `json:"bucketName"`
-		FileName   []string `json:"fileName"`
-	}{}
+	file := models.File{}
 	c.BindJSON(&file)
-	links := []Link{}
-	for _, fn := range file.FileName {
-		url := minioServer.GetFileLink(file.BucketName, fn)
-		url_string := url.Scheme + "://" + url.Host + url.Path + "?" + url.RawQuery
-		links = append(links, Link{FileName: fn, Url: url_string})
+	links, err := db.UploadFile(&file)
+	if err != nil {
+		log.Default().Println(err)
 	}
 	c.JSON(http.StatusOK, links)
 }

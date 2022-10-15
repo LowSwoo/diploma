@@ -1,7 +1,8 @@
 package server
 
 import (
-	minioServer "lowswoo/minio-server"
+	"log"
+	"lowswoo/db"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,14 +10,17 @@ import (
 
 // Return list of buckets as a list
 func getBucketList(c *gin.Context) {
-	c.JSON(http.StatusOK, minioServer.GetBucketList())
+	c.JSON(http.StatusOK, db.GetBucketListNames())
 }
 
+// Returns list of files on the bucket as a list
 func getFileList(c *gin.Context) {
-	c.JSON(http.StatusOK, minioServer.GetFileList(c.Query("bucketName")))
+	c.JSON(http.StatusOK, db.GetFileList(c.Query("bucketName")))
 }
 
+// Remove file from minio server
 func removeFile(c *gin.Context) {
-	minioServer.RemoveFile(c.Query("bucketName"), c.Query("fileName"))
-	c.JSON(http.StatusOK, minioServer.GetFileList(c.Query("bucketName")))
+	db.RemoveFile(c.Query("bucketName"), c.Query("fileName"))
+	log.Default().Println(c.Query("fileName"))
+	c.JSON(http.StatusOK, db.GetFileList(c.Query("bucketName")))
 }
