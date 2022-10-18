@@ -39,6 +39,7 @@ func initializeRoutes() {
 		file.POST("/upload", uploadFile)
 		file.GET("/list", getFileList)
 		file.GET("/remove", removeFile)
+		// file.GET("/download", downloadFile)
 	}
 }
 

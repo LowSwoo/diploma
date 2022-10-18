@@ -6,6 +6,7 @@ import (
 	"log"
 	server "lowswoo/minio-server"
 	"lowswoo/models"
+	"time"
 
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,7 +14,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var url = "mongodb://localhost:27017"
+var uri = "mongodb://localhost:27017"
 var ctx = context.TODO()
 
 func CreateBucket(b *models.Bucket) error {
@@ -60,6 +61,16 @@ func UploadFile(file *models.File) ([]models.Link, error) {
 	return links, nil
 }
 
+func DownloadFile(bucketName string, fileName string) string {
+	hashName, err := GetBucketHashName(bucketName)
+	if err != nil {
+		log.Default().Println(err)
+	}
+	url := server.GetFileLinkDownload(hashName, fileName)
+	url_string := url.Scheme + "://" + url.Host + url.Path + "?" + url.RawQuery
+	return url_string
+}
+
 func RemoveFile(bucketName string, fileName string) {
 	hashName, err := GetBucketHashName(bucketName)
 	if err != nil {
@@ -69,9 +80,11 @@ func RemoveFile(bucketName string, fileName string) {
 }
 
 func GetBucketHashName(bucketName string) (string, error) {
+	// start := time.Now()
 	if !bucketExists(bucketName) {
 		return "", errors.New("Bucket doesn't exist | Get bucket hash name")
 	}
+	// log.Default().Println(time.Since(start))
 	var bucket = models.Bucket{}
 	db, err := connect()
 	if err != nil {
@@ -82,15 +95,23 @@ func GetBucketHashName(bucketName string) (string, error) {
 }
 
 func GetFileList(bucketName string) []minio.ObjectInfo {
+	// start := time.Now()
 	if len(bucketName) == 0 {
 		return nil
 	}
 	hashName, err := GetBucketHashName(bucketName)
+	// log.Default().Println(time.Since(start))
 	if err != nil {
 		log.Default().Println(err)
 		return nil
 	}
-	return server.GetFileList(hashName)
+	files := server.GetFileList(hashName)
+	for idx, file := range files {
+		files[idx].UserTags = map[string]string{
+			"link": DownloadFile(bucketName, file.Key),
+		}
+	}
+	return files
 }
 
 func RemoveBucket(bucketName string) error {
@@ -112,6 +133,7 @@ func RemoveBucket(bucketName string) error {
 
 func GetBucketListNames() []string {
 	db, err := connect()
+
 	if err != nil {
 		// log.Fatal(err)
 		log.Default().Println("Тут")
@@ -126,7 +148,7 @@ func GetBucketListNames() []string {
 }
 
 func connect() (*mongo.Database, error) {
-	session, err := mongo.NewClient(options.Client().ApplyURI(url))
+	session, err := mongo.NewClient(options.Client().ApplyURI(uri))
 	if err != nil {
 		return nil, err
 	}
@@ -134,5 +156,8 @@ func connect() (*mongo.Database, error) {
 	if err != nil {
 		return nil, err
 	}
+	start := time.Now()
+	session.Ping(ctx, nil)
+	log.Default().Println(time.Since(start))
 	return session.Database("buckets"), nil
 }

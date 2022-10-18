@@ -24,3 +24,9 @@ func removeFile(c *gin.Context) {
 	log.Default().Println(c.Query("fileName"))
 	c.JSON(http.StatusOK, db.GetFileList(c.Query("bucketName")))
 }
+
+func downloadFile(c *gin.Context) {
+	addr := db.DownloadFile(c.Query("bucketName"), c.Query("filename"))
+	log.Default().Println(addr)
+	c.JSON(http.StatusOK, addr)
+}

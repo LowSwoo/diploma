@@ -3,8 +3,8 @@
     <v-sheet min-height="70vh" rounded="lg" elevation="4">
       <br />
       <h2 class="text-center" v-if="files.length == 0">Для данного расчёта нет данных</h2>
-      <v-card class="mx-auto px-1" flat  tile>
-        <v-list >
+      <v-card class="mx-auto px-1" flat tile>
+        <v-list>
           <v-list-item-group v-model="selectedItem" color="primary">
             <v-list-item v-for="(item, i) in files" :key="i">
               <v-list-item-content v-on:click="currentFile = item.name; GetFileInfo()">
@@ -13,8 +13,12 @@
                     <v-list-item-title v-text="item.name"></v-list-item-title>
                   </v-col>
                   <v-col class="text-right">
-                    <v-btn icon color="light-blue darken-2"><v-icon>mdi-download</v-icon></v-btn>
-                    <v-btn icon color="red darken-4" @click="RemoveFile(item.name)"><v-icon>mdi-delete-forever</v-icon></v-btn>
+                    <v-btn icon color="light-blue darken-2" v-bind:href="item.userTags.link">
+                      <v-icon>mdi-download</v-icon>
+                    </v-btn>
+                    <v-btn icon color="red darken-4" @click="RemoveFile(item.name)">
+                      <v-icon>mdi-delete-forever</v-icon>
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-list-item-content>
@@ -26,6 +30,7 @@
   </v-col>
 </template>
 <script>
+
 export default {
   name: "MainSheet",
   data: () => ({
@@ -35,7 +40,7 @@ export default {
     selectedItem: null,
   }),
   methods: {
-    RemoveFile: async function(filename) {
+    RemoveFile: async function (filename) {
       await this.$http
         .get("http://localhost:8080" + "/api/file/remove", {
           params: {
@@ -49,22 +54,24 @@ export default {
       this.GetFileList()
     },
     GetFileInfo() {
-      console.log(this.files.find((x)=>{return x.name == this.currentFile}))
+      console.log(this.files.find((x) => { return x.name == this.currentFile }))
     },
     GetFileList() {
       this.$http
         .get("http://localhost:8080" + "/api/file/list", {
           params: { bucketName: this.bucketName },
         })
-        .then(
-          (response) => {
+        .then((response) => {
             this.files = response.data;
-            console.log(this.files);
-          },
-          (response) => {
-            this.files = response.data;
-            console.log(response);
-          }
+            // this.files.forEach(element => {
+            //   this.fileLinks.push({
+            //     link: this.DownloadFileHandler(element.name),
+            //     filename: element.name
+            //   })
+            //   console.log(this.fileLinks)
+            // });
+            },
+          
         );
     },
   },
@@ -73,7 +80,7 @@ export default {
       this.bucketName = bucketName;
       this.GetFileList();
     });
-    this.$root.$on("CheckFilesUpdates", () => {this.GetFileList()})
+    this.$root.$on("CheckFilesUpdates", () => { this.GetFileList() })
   },
 };
 </script>

@@ -72,6 +72,15 @@ func GetFileLink(bucketName string, fileName string) *url.URL {
 	return url
 }
 
+func GetFileLinkDownload(bucketname string, filename string) *url.URL {
+	client, ctx := Login()
+	url, err := client.PresignedGetObject(ctx, bucketname, filename, time.Second*2400, nil)
+	if err != nil {
+		log.Default().Println(err)
+	}
+	return url
+}
+
 func GetFileList(bucketName string) []minio.ObjectInfo {
 	var objects []minio.ObjectInfo
 	client, ctx := Login()
