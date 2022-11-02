@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"lowswoo/models"
+	"net"
 	"net/url"
 	"time"
 
@@ -14,10 +15,21 @@ import (
 
 var d models.Data
 
+type MinioServer struct {
+	customHost string
+	customPort string
+}
+
+var m MinioServer
+
+func SetHost(host string) {
+	m.customHost, m.customPort, _ = net.SplitHostPort(host)
+}
+
 func Login() (*minio.Client, context.Context) {
 	ctx := context.Background()
 	data := d.GetData()
-	minioClient, err := minio.New(data.Host+":"+data.Port, &minio.Options{
+	minioClient, err := minio.New(m.customHost+":"+data.Port, &minio.Options{
 		Creds:  credentials.NewStaticV4(data.AccessKeyID, data.SecretAccessKey, ""),
 		Secure: data.UseSSL,
 	})
@@ -64,7 +76,8 @@ func RemoveBucket(bucketName string) error {
 
 func GetFileLink(bucketName string, fileName string) *url.URL {
 	client, ctx := Login()
-	url, err := client.PresignedPutObject(ctx, bucketName, fileName, time.Second*2400)
+	expiry := time.Second * 60 * 60 * 24
+	url, err := client.PresignedPutObject(ctx, bucketName, fileName, expiry)
 	if err != nil {
 		log.Default().Println(err)
 	}
@@ -74,6 +87,7 @@ func GetFileLink(bucketName string, fileName string) *url.URL {
 
 func GetFileLinkDownload(bucketname string, filename string) *url.URL {
 	client, ctx := Login()
+	log.Default().Println(ctx)
 	url, err := client.PresignedGetObject(ctx, bucketname, filename, time.Second*2400, nil)
 	if err != nil {
 		log.Default().Println(err)

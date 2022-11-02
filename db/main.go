@@ -6,6 +6,7 @@ import (
 	"log"
 	server "lowswoo/minio-server"
 	"lowswoo/models"
+	"strings"
 
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -44,7 +45,7 @@ func bucketExists(bucketName string) bool {
 	return false
 }
 
-func UploadFile(file *models.File) ([]models.Link, error) {
+func UploadFile(file *models.File, hostURL string) ([]models.Link, error) {
 	links := []models.Link{}
 	var err error
 	file.BucketName, err = GetBucketHashName(file.BucketName)
@@ -53,20 +54,24 @@ func UploadFile(file *models.File) ([]models.Link, error) {
 	}
 	for _, fn := range file.FileName {
 		url := server.GetFileLink(file.BucketName, fn)
-		url_string := url.Scheme + "://" + url.Host + url.Path + "?" + url.RawQuery
+		host := strings.Split(hostURL, ":")[0] + ":" + url.Port()
+		url_string := url.Scheme + "://" + host + url.Path + "?" + url.RawQuery
 		links = append(links, models.Link{FileName: fn, Url: url_string})
 	}
 	log.Default().Println(links)
 	return links, nil
 }
 
-func DownloadFile(bucketName string, fileName string) string {
+func DownloadFile(bucketName string, fileName string, hostURL string) string {
 	hashName, err := GetBucketHashName(bucketName)
 	if err != nil {
 		log.Default().Println(err)
 	}
 	url := server.GetFileLinkDownload(hashName, fileName)
-	url_string := url.Scheme + "://" + url.Host + url.Path + "?" + url.RawQuery
+	// log.Default().Printf("Default link: %v\n", url)
+	// log.Default().Printf("hostURL: %v\n", hostURL)
+	host := strings.Split(hostURL, ":")[0] + ":" + url.Port()
+	url_string := url.Scheme + "://" + host + url.Path + "?" + url.RawQuery
 	return url_string
 }
 
@@ -93,7 +98,7 @@ func GetBucketHashName(bucketName string) (string, error) {
 	return bucket.HashName, nil
 }
 
-func GetFileList(bucketName string) []minio.ObjectInfo {
+func GetFileList(bucketName string, hostURL string) []minio.ObjectInfo {
 	// start := time.Now()
 	if len(bucketName) == 0 {
 		return nil
@@ -107,7 +112,7 @@ func GetFileList(bucketName string) []minio.ObjectInfo {
 	files := server.GetFileList(hashName)
 	for idx, file := range files {
 		files[idx].UserTags = map[string]string{
-			"link": DownloadFile(bucketName, file.Key),
+			"link": DownloadFile(bucketName, file.Key, hostURL),
 		}
 	}
 	return files

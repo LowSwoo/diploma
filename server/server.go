@@ -2,6 +2,7 @@ package server
 
 import (
 	"log"
+	server "lowswoo/minio-server"
 	"net/http"
 	"os"
 	"strings"
@@ -46,6 +47,7 @@ func initializeRoutes() {
 
 	router.Use(authMiddleware)
 	api := router.Group("/api")
+	api.Use(SetHost)
 	bucket := api.Group("/bucket")
 	{
 		bucket.GET("/list", getBucketList)
@@ -72,4 +74,8 @@ func authMiddleware(c *gin.Context) {
 		}
 		c.AbortWithStatus(http.StatusOK)
 	}
+}
+
+func SetHost(c *gin.Context) {
+	server.SetHost(c.Request.Host)
 }
