@@ -6,7 +6,6 @@ import (
 	"log"
 	server "lowswoo/minio-server"
 	"lowswoo/models"
-	"time"
 
 	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -156,8 +155,8 @@ func connect() (*mongo.Database, error) {
 	if err != nil {
 		return nil, err
 	}
-	start := time.Now()
-	session.Ping(ctx, nil)
-	log.Default().Println(time.Since(start))
+	// start := time.Now()
+	// session.Ping(ctx, nil)
+	// log.Default().Println(time.Since(start))
 	return session.Database("buckets"), nil
 }

@@ -1,25 +1,45 @@
 package server
 
 import (
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-var router *gin.Engine
+var (
+	router *gin.Engine
+	host   string
+	port   string
+)
 
 func Run() {
+	initServer()
+	initializeRoutes()
+	router.Run(string(host + ":" + port))
+}
+
+func initServer() {
 	router = gin.Default()
+	setServerSettings()
 	router.Use(static.Serve("/", static.LocalFile("front/dist", true)))
 	router.NoRoute(func(ctx *gin.Context) {
 		if !strings.HasPrefix(ctx.Request.RequestURI, "/api") {
 			ctx.File("/front/dist/index.html")
 		}
 	})
-	initializeRoutes()
-	router.Run("localhost:8080")
+}
+
+func setServerSettings() {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatal("No .env file found")
+	}
+	host = os.Getenv("SERVER_HOST")
+	port = os.Getenv("SERVER_PORT")
 }
 
 func initializeRoutes() {

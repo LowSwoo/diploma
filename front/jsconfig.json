@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    // "types": ["vuetify"],
     "target": "es5",
     "module": "esnext",
     "baseUrl": "./",
@@ -14,6 +15,6 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ]
+    ],
   }
 }

@@ -42,7 +42,7 @@ export default {
   methods: {
     RemoveFile: async function (filename) {
       await this.$http
-        .get("http://localhost:8080" + "/api/file/remove", {
+        .get(location.href + "api/file/remove", {
           params: {
             fileName: filename,
             bucketName: this.bucketName,
@@ -58,18 +58,11 @@ export default {
     },
     GetFileList() {
       this.$http
-        .get("http://localhost:8080" + "/api/file/list", {
+        .get(location.href + "api/file/list", {
           params: { bucketName: this.bucketName },
         })
         .then((response) => {
             this.files = response.data;
-            // this.files.forEach(element => {
-            //   this.fileLinks.push({
-            //     link: this.DownloadFileHandler(element.name),
-            //     filename: element.name
-            //   })
-            //   console.log(this.fileLinks)
-            // });
             },
           
         );

@@ -67,7 +67,7 @@ export default {
     }),
     methods: {
       GetBucketList() {
-        this.$http.get("http://localhost:8080/api/bucket/list").then((resp) => {
+        this.$http.get(location.href + "api/bucket/list").then((resp) => {
         this.bucketList = resp.data;
         this.bucketName = this.bucketList[0]
         this.$root.$emit('ChangeCurrentBucket', this.bucketName)

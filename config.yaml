@@ -1,5 +1,5 @@
-host: 127.0.0.1
-port: 9000
-username: minioadmin
-password: minioadmin
-useSSL: false
+MINIO_HOST: 127.0.0.1
+MINIO_PORT: 9000
+MINIO_USERNAME: minioadmin
+MINIO_PASSWORD: minioadmin
+MINIO_USESSL: false

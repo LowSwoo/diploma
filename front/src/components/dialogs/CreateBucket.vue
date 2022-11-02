@@ -53,8 +53,9 @@ export default {
   }),
   methods: {
     CreateBucket() {
+      console.log(location.href)
       this.$http
-        .post("http://localhost:8080" + "/api/bucket/create", {
+        .post(location.href + "api/bucket/create", {
           bucketName: this.bucket.name,
           bucketRegion: this.bucket.region,
           objectLocking: this.bucket.objectLocking,

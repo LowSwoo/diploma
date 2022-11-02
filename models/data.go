@@ -8,11 +8,11 @@ import (
 )
 
 type Data struct {
-	Host            string `yaml:"host"`
-	Port            string `yaml:"port"`
-	AccessKeyID     string `yaml:"username"`
-	SecretAccessKey string `yaml:"password"`
-	UseSSL          bool   `yaml:"useSSL"`
+	Host            string `yaml:"MINIO_HOST"`
+	Port            string `yaml:"MINIO_PORT"`
+	AccessKeyID     string `yaml:"MINIO_USERNAME"`
+	SecretAccessKey string `yaml:"MINIO_PASSWORD"`
+	UseSSL          bool   `yaml:"MINIO_USESSL"`
 }
 
 func (d *Data) GetData() *Data {

@@ -4,6 +4,7 @@
       <v-avatar class="mr-10" color="grey darken-3" size="32">L</v-avatar>
 
       <v-btn text @click="showCreateDialog = true"> Создать расчёт </v-btn>
+      <v-btn text @click="showCreateDescriptionDialog = true">Задать описание</v-btn>
 
       <v-spacer></v-spacer>
 
@@ -20,22 +21,25 @@
         </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
       <UploadFile :bucketName="bucketName" :showUploadDialog="showUploadDialog" v-on:CloseUploadDialog="showUploadDialog = false"></UploadFile>
+      <CreateBucketDescription :showCreateDescriptionDialog="showCreateDescriptionDialog" v-on:CloseDescriptionDialog="showCreateDescriptionDialog = false"></CreateBucketDescription>
     </v-container>
   </v-app-bar>
 </template>
 <script>
   import CreateBucket from "./dialogs/CreateBucket.vue";
+import CreateBucketDescription from "./dialogs/CreateBucketDescription.vue";
 import UploadFile from "./dialogs/UploadFile.vue";
   export default {
     data: () => ({
       showCreateDialog: false,
       showUploadDialog: false,
+      showCreateDescriptionDialog: false,
       bucketName: '',
     }),
     methods: {
       RemoveBucket() {
         this.$http
-        .post("http://localhost:8080" + "/api/bucket/remove", {
+        .post(location.href + "api/bucket/remove", {
           bucketName: this.bucketName,
         })
         .then(
@@ -51,6 +55,6 @@ import UploadFile from "./dialogs/UploadFile.vue";
     mounted() {
       this.$root.$on('ChangeCurrentBucket', (bucketName) => this.bucketName = bucketName)
     },
-    components: { CreateBucket, UploadFile },
+    components: { CreateBucket, UploadFile, CreateBucketDescription },
   };
 </script>

@@ -56,7 +56,7 @@ export default {
     },
     HandleFileChanged() {
       this.$http
-        .post("http://localhost:8080" + "/api/file/upload", {
+        .post(location.href + "api/file/upload", {
           bucketName: this.bucketName,
           fileName: this.uploadFiles.map((el) => el.name),
         })
