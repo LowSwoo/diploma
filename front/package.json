@@ -7,9 +7,12 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@tiptap/starter-kit": "^2.0.0-beta.202",
+    "@tiptap/vue-2": "^2.0.0-beta.202",
     "core-js": "^3.8.3",
     "lodash": "^4.17.21",
     "marked": "^4.1.1",
+    "tiptap-vuetify": "^2.24.0",
     "vue": "^2.6.14",
     "vue-resource": "^1.5.3",
     "vue-router": "^3.5.1",

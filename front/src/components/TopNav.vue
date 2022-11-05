@@ -42,7 +42,7 @@
         </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
       <UploadFile :bucketName="bucketName" :showUploadDialog="showUploadDialog" v-on:CloseUploadDialog="showUploadDialog = false" v-on:uploadProgress="uploadProgress"></UploadFile>
-      <CreateBucketDescription :showCreateDescriptionDialog="showCreateDescriptionDialog" v-on:CloseDescriptionDialog="showCreateDescriptionDialog = false"></CreateBucketDescription>
+      <CreateBucketDescription :bucketName="bucketName" :showCreateDescriptionDialog="showCreateDescriptionDialog" v-on:CloseDescriptionDialog="showCreateDescriptionDialog = false"></CreateBucketDescription>
     </v-container>
   </v-app-bar>
 </template>

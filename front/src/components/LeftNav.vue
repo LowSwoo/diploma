@@ -1,20 +1,4 @@
 <template>
-  <!-- <v-col cols="2">
-    <v-sheet rounded="lg" elevation="2">
-      <v-list color="transparent">
-        <v-list-item>
-            <v-list-item>Текущие расчёты</v-list-item>
-        </v-list-item>
-        <v-divider class="my-2"></v-divider>
-
-        <v-list-item v-for="bucket in bucketList" :key="bucket" link>
-          <v-list-item-content v-on:click="$root.$emit('ChangeCurrentBucket', bucket)">
-            <v-list-item-title> {{ bucket }} </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-sheet>
-  </v-col> -->
 
   <v-navigation-drawer
       v-model="drawer"
@@ -31,7 +15,6 @@
           color="blue lighten-2"
         >LS</v-avatar>
 
-        <!-- <div>github.com/lowswoo</div> -->
       </v-sheet>
 
       <v-divider></v-divider>
