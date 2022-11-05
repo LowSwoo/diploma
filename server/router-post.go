@@ -47,3 +47,15 @@ func uploadFile(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, links)
 }
+
+func setDescription(c *gin.Context) {
+	d := models.BucketDescription{}
+	c.BindJSON(&d)
+	d.ID = "description"
+	log.Default().Println("Description ", d.Description)
+	err := db.SetDescription(&d)
+	if err != nil {
+		log.Default().Println(err)
+	}
+	c.JSON(http.StatusOK, nil)
+}

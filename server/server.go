@@ -53,7 +53,7 @@ func initializeRoutes() {
 		bucket.GET("/list", getBucketList)
 		bucket.POST("/remove", removeBucket)
 		bucket.POST("/create", createBucket)
-
+		bucket.POST("/setDescription", setDescription)
 	}
 
 	file := api.Group("/file")
@@ -61,7 +61,7 @@ func initializeRoutes() {
 		file.POST("/upload", uploadFile)
 		file.GET("/list", getFileList)
 		file.GET("/remove", removeFile)
-		// file.GET("/download", downloadFile)
+		file.GET("/download", downloadFile)
 	}
 }
 
