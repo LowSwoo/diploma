@@ -57,7 +57,7 @@
 </template>
 
 <script>
-
+import settings from '@/settings';
 export default {
     name: "LeftNav",
     data: () =>({
@@ -67,7 +67,8 @@ export default {
     }),
     methods: {
       GetBucketList() {
-        this.$http.get(location.href + "api/bucket/list").then((resp) => {
+        console.log(location.href)
+        this.$http.get(settings.ebaHOST + "api/bucket/list").then((resp) => {
         this.bucketList = resp.data;
         this.bucketName = this.bucketList[0]
         this.$root.$emit('ChangeCurrentBucket', this.bucketName)

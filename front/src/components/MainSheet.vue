@@ -30,7 +30,8 @@
   </v-col>
 </template>
 <script>
-
+import settings from "../settings";
+import Settings from "../settings"
 export default {
   name: "MainSheet",
   data: () => ({
@@ -42,7 +43,7 @@ export default {
   methods: {
     RemoveFile: async function (filename) {
       await this.$http
-        .get(location.href + "api/file/remove", {
+        .get(settings.ebaHOST + "api/file/remove", {
           params: {
             fileName: filename,
             bucketName: this.bucketName,
@@ -58,7 +59,7 @@ export default {
     },
     GetFileList() {
       this.$http
-        .get(location.href + "api/file/list", {
+        .get(settings.ebaHOST + "api/file/list", {
           params: { bucketName: this.bucketName },
         })
         .then((response) => {

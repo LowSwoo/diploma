@@ -1,5 +1,5 @@
 <template>
-  <!-- <v-snackbar v-model="uploadSnackbar" light right top app>
+  <v-snackbar v-model="uploadSnackbar" light right top app>
     <v-row v-for="el in uploadFilesProgress">
       <v-col>{{ el.fileName }}</v-col>
       <v-col>{{ el.bucketName }}</v-col>
@@ -17,7 +17,7 @@
         >Close</v-btn
       >
     </template>
-  </v-snackbar> -->
+  </v-snackbar>
 </template>
 
 <script>

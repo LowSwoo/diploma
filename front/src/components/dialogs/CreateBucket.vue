@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import settings from '@/settings';
 export default {
   name: "CreateBucket",
   props: ["showCreateDialog"],
@@ -53,9 +54,8 @@ export default {
   }),
   methods: {
     CreateBucket() {
-      console.log(location.href)
       this.$http
-        .post(location.href + "api/bucket/create", {
+        .post(settings.ebaHOST + "api/bucket/create", {
           bucketName: this.bucket.name,
           bucketRegion: this.bucket.region,
           objectLocking: this.bucket.objectLocking,

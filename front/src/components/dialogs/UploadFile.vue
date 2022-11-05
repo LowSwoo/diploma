@@ -56,7 +56,7 @@ export default {
     },
     HandleFileChanged() {
       this.$http
-        .post(location.href + "api/file/upload", {
+        .post(settings.ebaHOST + "api/file/upload", {
           bucketName: this.bucketName,
           fileName: this.uploadFiles.map((el) => el.name),
         })
@@ -90,6 +90,7 @@ export default {
                     (upProgress.loaded * 100) / upProgress.total
                     )
                     console.log(uploadFile['fileName'], uploadFile["uploaded"])
+                    this.$emit("uploadProgress", this.uploadFilesProgress)
                 }
               })
             },
