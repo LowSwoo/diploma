@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import settings from '@/settings';
+
 export default {
   name: "UploadFile",
   props: ["showUploadDialog", 'bucketName'],

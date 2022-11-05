@@ -2,8 +2,9 @@
   <v-col>
     <v-sheet min-height="70vh" rounded="lg" elevation="4">
       <br />
-      <h2 class="text-center" v-if="files.length == 0">Для данного расчёта нет данных</h2>
-      <v-card class="mx-auto px-1" flat tile>
+      <template v-if="files">
+        <template v-if="files.length >= 1">
+        <v-card class="mx-auto px-1" flat tile>
         <v-list>
           <v-list-item-group v-model="selectedItem" color="primary">
             <v-list-item v-for="(item, i) in files" :key="i">
@@ -26,12 +27,17 @@
           </v-list-item-group>
         </v-list>
       </v-card>
+      </template>
+    </template>
+    <h2 class="text-center" v-else>Для данного расчёта нет данных</h2>
+      
+
+      
     </v-sheet>
   </v-col>
 </template>
 <script>
 import settings from "../settings";
-import Settings from "../settings"
 export default {
   name: "MainSheet",
   data: () => ({
@@ -72,6 +78,7 @@ export default {
   mounted() {
     this.$root.$on("ChangeCurrentBucket", (bucketName) => {
       this.bucketName = bucketName;
+      console.log(this.bucketName)
       this.GetFileList();
     });
     this.$root.$on("CheckFilesUpdates", () => { this.GetFileList() })
