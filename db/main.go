@@ -165,3 +165,30 @@ func connect() (*mongo.Database, error) {
 	// log.Default().Println(time.Since(start))
 	return session.Database("buckets"), nil
 }
+
+func SetDescription(d *models.BucketDescription) error {
+	db, err := connect()
+	if err != nil {
+		return err
+	}
+	if bucketExists(d.BucketName) {
+		_, err := db.Collection(d.BucketName).InsertOne(ctx, d)
+		if err != nil {
+			return err
+		}
+		// log.Default().Println(result)
+	} else {
+		err = errors.New("no such bucket")
+	}
+	return err
+}
+
+// func GetDescription(bucketName string) (interface{}, error) {
+// 	db, err := connect()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	if bucketExists(bucketName) {
+// 		// db.Collection(bucketName).FindOne(ctx, )
+// 	}
+// }
