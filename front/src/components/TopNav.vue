@@ -1,7 +1,10 @@
 <template>
   <v-app-bar app elevation="2" color="blue-grey darken-4">
+    <v-app-bar-nav-icon @click.stop='toggleNavigationDrawer'></v-app-bar-nav-icon>
     <v-container class="py-0 fill-height">
-      <v-avatar class="mr-10" color="grey darken-3" size="32">L</v-avatar>
+      <!-- <v-btn fab small>
+        <v-avatar class="mr-10" color="grey darken-3" size="32" >L</v-avatar>
+      </v-btn> -->
 
       <v-btn text @click="showCreateDialog = true"> Создать расчёт </v-btn>
       <v-btn text @click="showCreateDescriptionDialog = true">Задать описание</v-btn>
@@ -63,6 +66,9 @@ import Settings from "../settings"
     methods: {
       uploadProgress(data) {
         this.uploadFilesProgress = data
+      },
+      toggleNavigationDrawer() {
+        this.$emit('toggleNavigationDrawer')
       },
       RemoveBucket() {
         this.$http

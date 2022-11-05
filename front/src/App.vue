@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <TopNav></TopNav>
-    <LeftNav></LeftNav>
+    <TopNav v-on:toggleNavigationDrawer="navigationDrawer = !navigationDrawer"></TopNav>
+    <LeftNav :navigationDrawer="navigationDrawer"></LeftNav>
     <!-- <Rightbar></Rightbar> -->
     <v-main>
       <MainSheet></MainSheet>
@@ -19,6 +19,7 @@ import Rightbar from "./components/Rightbar.vue";
 export default {
   name: "App",
   data: () => ({
+    navigationDrawer: true,
     //
   }),
   components: { TopNav, LeftNav, MainSheet, Rightbar },

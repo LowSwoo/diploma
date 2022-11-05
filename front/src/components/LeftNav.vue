@@ -1,9 +1,10 @@
 <template>
 
   <v-navigation-drawer
-      v-model="drawer"
+      v-model="navigationDrawer"
       app
       color="blue-grey darken-4"
+      
     >
       <v-sheet
         class="pa-4"
@@ -43,10 +44,11 @@
 import settings from '@/settings';
 export default {
     name: "LeftNav",
+    props: ['navigationDrawer'],
     data: () =>({
       bucketList: [],
       bucketName: '',
-      drawer: null,
+      drawer: true,
     }),
     methods: {
       GetBucketList() {
