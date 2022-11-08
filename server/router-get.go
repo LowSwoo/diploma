@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"lowswoo/db"
 	"net/http"
 
@@ -21,12 +20,12 @@ func getFileList(c *gin.Context) {
 // Remove file from minio server
 func removeFile(c *gin.Context) {
 	db.RemoveFile(c.Query("bucketName"), c.Query("fileName"))
-	log.Default().Println(c.Query("fileName"))
+	// log.Default().Println(c.Query("fileName"))
 	c.JSON(http.StatusOK, db.GetFileList(c.Query("bucketName"), c.Request.Host))
 }
 
 func downloadFile(c *gin.Context) {
 	addr := db.DownloadFile(c.Query("bucketName"), c.Query("filename"), c.Request.Host)
-	log.Default().Println(addr)
+	// log.Default().Println(addr)
 	c.JSON(http.StatusOK, addr)
 }

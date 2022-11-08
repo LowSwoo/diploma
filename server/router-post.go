@@ -12,7 +12,7 @@ import (
 // THIS
 func createBucket(c *gin.Context) {
 
-	bucket := models.Bucket{}
+	bucket := models.BucketDB{}
 	c.BindJSON(&bucket)
 
 	err := db.CreateBucket(&bucket)
@@ -39,7 +39,7 @@ func removeBucket(c *gin.Context) {
 }
 
 func uploadFile(c *gin.Context) {
-	file := models.File{}
+	file := models.FileUpload{}
 	c.BindJSON(&file)
 	links, err := db.UploadFile(&file, c.Request.Host)
 	if err != nil {
