@@ -2,10 +2,13 @@ package db
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log"
+	"lowswoo/bucket"
 	server "lowswoo/minio-server"
 	"lowswoo/models"
+	"os"
 	"strings"
 
 	"github.com/minio/minio-go/v7"
@@ -17,7 +20,7 @@ import (
 var uri = "mongodb://localhost:27017"
 var ctx = context.TODO()
 
-func CreateBucket(b *models.Bucket) error {
+func CreateBucket(b *models.BucketDB) error {
 	b.HashName = models.GetMD5hash(b.BucketName)
 	db, err := connect()
 	if err != nil {
@@ -45,7 +48,7 @@ func bucketExists(bucketName string) bool {
 	return false
 }
 
-func UploadFile(file *models.File, hostURL string) ([]models.Link, error) {
+func UploadFile(file *models.FileUpload, hostURL string) ([]models.Link, error) {
 	links := []models.Link{}
 	var err error
 	file.BucketName, err = GetBucketHashName(file.BucketName)
@@ -53,9 +56,10 @@ func UploadFile(file *models.File, hostURL string) ([]models.Link, error) {
 		return nil, err
 	}
 	for _, fn := range file.FileName {
-		url := server.GetFileLink(file.BucketName, fn)
+		url := server.GetFileLink(file.BucketName, file.Folder+"/"+fn)
 		host := strings.Split(hostURL, ":")[0] + ":" + url.Port()
 		url_string := url.Scheme + "://" + host + url.Path + "?" + url.RawQuery
+		log.Default().Println(url.Path)
 		links = append(links, models.Link{FileName: fn, Url: url_string})
 	}
 	log.Default().Println(links)
@@ -89,7 +93,7 @@ func GetBucketHashName(bucketName string) (string, error) {
 		return "", errors.New("Bucket doesn't exist | Get bucket hash name")
 	}
 	// log.Default().Println(time.Since(start))
-	var bucket = models.Bucket{}
+	var bucket = models.BucketDB{}
 	db, err := connect()
 	if err != nil {
 		return "", err
@@ -99,12 +103,11 @@ func GetBucketHashName(bucketName string) (string, error) {
 }
 
 func GetFileList(bucketName string, hostURL string) []minio.ObjectInfo {
-	// start := time.Now()
 	if len(bucketName) == 0 {
 		return nil
 	}
+	b := bucket.NewBucket(bucketName)
 	hashName, err := GetBucketHashName(bucketName)
-	// log.Default().Println(time.Since(start))
 	if err != nil {
 		log.Default().Println(err)
 		return nil
@@ -114,8 +117,21 @@ func GetFileList(bucketName string, hostURL string) []minio.ObjectInfo {
 		files[idx].UserTags = map[string]string{
 			"link": DownloadFile(bucketName, file.Key, hostURL),
 		}
+		b.AppendFile(file.Key, DownloadFile(bucketName, file.Key, hostURL), nil)
 	}
+	WriteToFile(b)
 	return files
+}
+
+func WriteToFile(a interface{}) {
+	data, err := json.Marshal(a)
+	if err != nil {
+		log.Default().Println(err)
+	}
+	err = os.WriteFile("bucket_data.json", data, 0644)
+	if err != nil {
+		log.Default().Println(err)
+	}
 }
 
 func RemoveBucket(bucketName string) error {

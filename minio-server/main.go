@@ -52,7 +52,7 @@ func GetBucketListNames() []string {
 	return elements
 }
 
-func CreateBucket(bucket *models.Bucket) error {
+func CreateBucket(bucket *models.BucketDB) error {
 	client, ctx := Login()
 	log.Default().Println("Creating bucket with name", bucket.HashName)
 	err := client.MakeBucket(ctx, bucket.HashName, minio.MakeBucketOptions{
@@ -98,7 +98,7 @@ func GetFileLinkDownload(bucketname string, filename string) *url.URL {
 func GetFileList(bucketName string) []minio.ObjectInfo {
 	var objects []minio.ObjectInfo
 	client, ctx := Login()
-	for object := range client.ListObjects(ctx, bucketName, minio.ListObjectsOptions{}) {
+	for object := range client.ListObjects(ctx, bucketName, minio.ListObjectsOptions{Recursive: true}) {
 		objects = append(objects, object)
 	}
 	return objects
