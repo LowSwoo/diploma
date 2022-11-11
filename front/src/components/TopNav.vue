@@ -33,7 +33,9 @@
           >
         </template>
       </v-snackbar>
-
+      <v-btn>
+        {{currentFolder}}
+      </v-btn>
       <v-btn v-if="bucketName" icon @click="showUploadDialog = true">
         <v-icon>mdi-cloud-upload</v-icon>
       </v-btn>
@@ -44,7 +46,7 @@
                     <v-icon color="red darken-4" class="mx-2">mdi-delete-forever</v-icon>
         </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
-      <UploadFile :bucketName="bucketName" :showUploadDialog="showUploadDialog" v-on:CloseUploadDialog="showUploadDialog = false" v-on:uploadProgress="uploadProgress"></UploadFile>
+      <UploadFile :currentFolder="currentFolder" :bucketName="bucketName" :showUploadDialog="showUploadDialog" v-on:CloseUploadDialog="showUploadDialog = false" v-on:uploadProgress="uploadProgress"></UploadFile>
       <CreateBucketDescription :bucketName="bucketName" :showCreateDescriptionDialog="showCreateDescriptionDialog" v-on:CloseDescriptionDialog="showCreateDescriptionDialog = false"></CreateBucketDescription>
     </v-container>
   </v-app-bar>
@@ -63,6 +65,7 @@ import Settings from "../settings"
       bucketName: '',
       uploadFilesProgress: [],
     }),
+    props: ['currentFolder'],
     methods: {
       uploadProgress(data) {
         this.uploadFilesProgress = data

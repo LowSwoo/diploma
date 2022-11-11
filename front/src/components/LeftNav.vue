@@ -3,18 +3,26 @@
   <v-navigation-drawer
       v-model="navigationDrawer"
       app
-      color="blue-grey darken-4"
+      
       
     >
       <v-sheet
         class="pa-4"
-        color="blue-grey darken-4"
+        
       >
-        <v-avatar
+      <v-row>
+        <v-col>
+
+          <v-avatar
           class="mb-4"
           size="64"
           color="blue lighten-2"
-        >LS</v-avatar>
+          >LS</v-avatar>
+        </v-col>
+        <v-col>
+          <v-switch v-model="$vuetify.theme.dark"></v-switch>
+        </v-col>
+      </v-row>
 
       </v-sheet>
 
@@ -37,11 +45,14 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-spacer></v-spacer>
     </v-navigation-drawer>
 </template>
 
 <script>
 import settings from '@/settings';
+import vuetify from '@/plugins/vuetify';
+
 export default {
     name: "LeftNav",
     props: ['navigationDrawer'],
