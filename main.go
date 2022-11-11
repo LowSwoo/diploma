@@ -1,6 +1,8 @@
 package main
 
-import "lowswoo/server"
+import (
+	"lowswoo/server"
+)
 
 func main() {
 	server.Run()

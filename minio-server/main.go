@@ -87,7 +87,7 @@ func GetFileLink(bucketName string, fileName string) *url.URL {
 
 func GetFileLinkDownload(bucketname string, filename string) *url.URL {
 	client, ctx := Login()
-	log.Default().Println(ctx)
+	// log.Default().Println(ctx)
 	url, err := client.PresignedGetObject(ctx, bucketname, filename, time.Second*2400, nil)
 	if err != nil {
 		log.Default().Println(err)
