@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <v-card min-height="70vh" rounded="lg" elevation="4">
+    <v-card min-height="70vh" rounded="lg" elevation="4" >
       <!-- <br /> -->
       <!-- <v-toolbar> -->
       <template v-if="folders">

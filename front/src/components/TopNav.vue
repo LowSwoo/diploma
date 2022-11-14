@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app elevation="2" color="blue-grey darken-4">
+  <v-app-bar app elevation="2" color="topNav">
     <v-app-bar-nav-icon @click.stop='toggleNavigationDrawer'></v-app-bar-nav-icon>
     <v-container class="py-0 fill-height">
       <!-- <v-btn fab small>
@@ -7,7 +7,7 @@
       </v-btn> -->
 
       <v-btn text @click="showCreateDialog = true"> Создать расчёт </v-btn>
-      <v-btn text @click="showCreateDescriptionDialog = true">Задать описание</v-btn>
+      <!-- <v-btn text @click="showCreateDescriptionDialog = true">Задать описание</v-btn> -->
 
       <v-spacer></v-spacer>
 
@@ -33,9 +33,6 @@
           >
         </template>
       </v-snackbar>
-      <v-btn>
-        {{currentFolder}}
-      </v-btn>
       <v-btn v-if="bucketName" icon @click="showUploadDialog = true">
         <v-icon>mdi-cloud-upload</v-icon>
       </v-btn>
@@ -47,13 +44,13 @@
         </v-btn>
       <CreateBucket :showCreateDialog="showCreateDialog" v-on:CloseCreateDialog="showCreateDialog = false"></CreateBucket>
       <UploadFile :currentFolder="currentFolder" :bucketName="bucketName" :showUploadDialog="showUploadDialog" v-on:CloseUploadDialog="showUploadDialog = false" v-on:uploadProgress="uploadProgress"></UploadFile>
-      <CreateBucketDescription :bucketName="bucketName" :showCreateDescriptionDialog="showCreateDescriptionDialog" v-on:CloseDescriptionDialog="showCreateDescriptionDialog = false"></CreateBucketDescription>
+      <!-- <CreateBucketDescription :bucketName="bucketName" :showCreateDescriptionDialog="showCreateDescriptionDialog" v-on:CloseDescriptionDialog="showCreateDescriptionDialog = false"></CreateBucketDescription> -->
     </v-container>
   </v-app-bar>
 </template>
 <script>
   import CreateBucket from "./dialogs/CreateBucket.vue";
-import CreateBucketDescription from "./dialogs/CreateBucketDescription.vue";
+// import CreateBucketDescription from "./dialogs/CreateBucketDescription.vue";
 import UploadFile from "./dialogs/UploadFile.vue";
 import Settings from "../settings"
   export default {
@@ -91,6 +88,6 @@ import Settings from "../settings"
     mounted() {
       this.$root.$on('ChangeCurrentBucket', (bucketName) => this.bucketName = bucketName)
     },
-    components: { CreateBucket, UploadFile, CreateBucketDescription },
+    components: { CreateBucket, UploadFile },
   };
 </script>

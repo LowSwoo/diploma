@@ -4,5 +4,5 @@ import Vue from 'vue'
 
 export default {
     name: "settings",
-    ebaHOST: "http://" + "25.15.93.175" + ":8080/"
+    ebaHOST: "http://" + "192.168.10.26" + ":8080/"
 } 

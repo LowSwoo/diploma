@@ -15,7 +15,16 @@ let options = {
                 info: '#2196F3',
                 success: '#4CAF50',
                 warning: '#FB8C00',
+                navigationDrawer: "#263238",
+                topNav: "#263238"
                 
+
+            },
+            light: {
+                navigationDrawer: "#CFD8DC",
+                navigationDrawerSheet: "#90A4AE",
+                topNav: "#CFD8DC",
+                mainSheet: "#ECEFF1"
 
             }
         }
