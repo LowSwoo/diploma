@@ -1,0 +1,66 @@
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /api/bucket/list          --> lowswoo/server.getBucketList (6 handlers)
+[GIN-debug] POST   /api/bucket/remove        --> lowswoo/server.removeBucket (6 handlers)
+[GIN-debug] POST   /api/bucket/create        --> lowswoo/server.createBucket (6 handlers)
+[GIN-debug] POST   /api/bucket/setDescription --> lowswoo/server.setDescription (6 handlers)
+[GIN-debug] POST   /api/file/upload          --> lowswoo/server.uploadFile (6 handlers)
+[GIN-debug] GET    /api/file/list            --> lowswoo/server.getFileList (6 handlers)
+[GIN-debug] GET    /api/file/remove          --> lowswoo/server.removeFile (6 handlers)
+[GIN-debug] GET    /api/file/download        --> lowswoo/server.downloadFile (6 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8080
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /api/bucket/list          --> lowswoo/server.getBucketList (6 handlers)
+[GIN-debug] POST   /api/bucket/remove        --> lowswoo/server.removeBucket (6 handlers)
+[GIN-debug] POST   /api/bucket/create        --> lowswoo/server.createBucket (6 handlers)
+[GIN-debug] POST   /api/bucket/setDescription --> lowswoo/server.setDescription (6 handlers)
+[GIN-debug] POST   /api/file/upload          --> lowswoo/server.uploadFile (6 handlers)
+[GIN-debug] GET    /api/file/list            --> lowswoo/server.getFileList (6 handlers)
+[GIN-debug] GET    /api/file/remove          --> lowswoo/server.removeFile (6 handlers)
+[GIN-debug] GET    /api/file/download        --> lowswoo/server.downloadFile (6 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8080
+[GIN] 2022/11/11 - 01:14:14 | 200 |    3.334049ms |  192.168.10.200 | GET      "/api/bucket/list"
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:14 context.Background
+2022/11/11 01:14:15 context.Background
+2022/11/11 01:14:15 context.Background
+[GIN] 2022/11/11 - 01:14:15 | 200 |  328.631388ms |  192.168.10.200 | GET      "/api/file/list?bucketName=adasaa"
