@@ -19,6 +19,10 @@ var (
 )
 
 func Run() {
+	// f, _ := os.OpenFile("log.txt", os.O_WRONLY|os.O_CREATE, 0666)
+	// gin.DefaultWriter = io.MultiWriter(f)
+	// defer f.Close()
+
 	initServer()
 	initializeRoutes()
 	router.Run(string(host + ":" + port))

@@ -11,7 +11,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/minio/minio-go/v7"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2/bson"
@@ -102,7 +101,7 @@ func GetBucketHashName(bucketName string) (string, error) {
 	return bucket.HashName, nil
 }
 
-func GetFileList(bucketName string, hostURL string) []minio.ObjectInfo {
+func GetFileList(bucketName string, hostURL string) map[string]bucket.Folder {
 	if len(bucketName) == 0 {
 		return nil
 	}
@@ -119,8 +118,9 @@ func GetFileList(bucketName string, hostURL string) []minio.ObjectInfo {
 		}
 		b.AppendFile(file.Key, DownloadFile(bucketName, file.Key, hostURL), nil)
 	}
+	b.SetFoldersList()
 	WriteToFile(b)
-	return files
+	return b.Folders
 }
 
 func WriteToFile(a interface{}) {

@@ -2,12 +2,14 @@ package bucket
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
 type Bucket struct {
-	Name    string            `json:"bucket"`
-	Folders map[string]Folder `json:"folders"`
+	Name        string            `json:"bucket"`
+	FoldersList []string          `json:"foldersList"`
+	Folders     map[string]Folder `json:"folders"`
 }
 
 func (b *Bucket) AppendFile(name, url string, info interface{}) error {
@@ -21,6 +23,16 @@ func (b *Bucket) AppendFile(name, url string, info interface{}) error {
 	temp := b.Folders[fs[0]]
 	temp.AppendFile(strings.Join(fs[1:], "/"), url, info)
 	return nil
+}
+
+func (b *Bucket) SetFoldersList() {
+	keys := make([]string, 0, len(b.Folders))
+	for k := range b.Folders {
+		keys = append(keys, k)
+	}
+	b.FoldersList = keys
+	fmt.Printf("%v", b.FoldersList)
+
 }
 
 func (b *Bucket) isFolder(name string) bool {

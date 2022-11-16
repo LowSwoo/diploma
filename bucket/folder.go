@@ -5,7 +5,7 @@ import (
 )
 
 type Folder struct {
-	Name    string            `json:"name"`
+	Name    string
 	Folders map[string]Folder `json:"folders"`
 	Files   map[string]File   `json:"files"`
 }
