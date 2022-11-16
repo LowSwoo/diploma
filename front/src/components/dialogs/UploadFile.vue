@@ -8,16 +8,8 @@
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-file-input
-                multiple
-                label="Выберите файл для загрузки"
-                ref="file"
-                type="file"
-                id="file"
-                v-model="uploadFiles"
-                @change="HandleFileChanged"
-                value="file"
-              >
+              <v-file-input multiple label="Выберите файл для загрузки" ref="file" type="file" id="file"
+                v-model="uploadFiles" @change="HandleFileChanged" value="file">
               </v-file-input>
             </v-col>
           </v-row>
@@ -25,11 +17,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          color="blue darken-1"
-          text
-          @click="CloseUploadFileDialog"
-        >
+        <v-btn color="blue darken-1" text @click="CloseUploadFileDialog">
           Close
         </v-btn>
         <v-btn color="blue darken-1" text @click="HandleFileUpload">
@@ -45,14 +33,14 @@ import settings from '@/settings';
 
 export default {
   name: "UploadFile",
-  props: ["showUploadDialog", 'bucketName'],
+  props: ["showUploadDialog", 'bucketName', 'currentFolder'],
   data: () => ({
     uploadFiles: [],
     fileLinks: [],
     uploadFilesProgress: [],
   }),
   methods: {
-    CloseUploadFileDialog(){
+    CloseUploadFileDialog() {
       this.uploadFiles = undefined
       this.$emit('CloseUploadDialog')
     },
@@ -61,6 +49,7 @@ export default {
         .post(settings.ebaHOST + "api/file/upload", {
           bucketName: this.bucketName,
           fileName: this.uploadFiles.map((el) => el.name),
+          folder: this.currentFolder,
         })
         .then((response) => {
           response.data.map((el) =>
@@ -74,7 +63,7 @@ export default {
       await this.fileLinks.forEach((fileLink) => {
         let formdata = new FormData();
         this.uploadFiles.forEach((upFile) => {
-          if (fileLink["fileName"] == upFile["name"]) {
+          if (fileLink["fileName"] === upFile["name"]) {
             formdata.append("data", upFile);
           }
         });
@@ -86,20 +75,20 @@ export default {
         this.$http
           .put(fileLink["url"], formdata, {
             uploadProgress: (upProgress) => {
-              this.uploadFilesProgress.forEach((uploadFile)=>{
-                if (uploadFile["fileName"]==fileLink["fileName"]){
+              this.uploadFilesProgress.forEach((uploadFile) => {
+                if (uploadFile["fileName"] === fileLink["fileName"]) {
                   uploadFile['uploaded'] = Math.round(
                     (upProgress.loaded * 100) / upProgress.total
-                    )
-                    console.log(uploadFile['fileName'], uploadFile["uploaded"])
-                    this.$emit("uploadProgress", this.uploadFilesProgress)
+                  )
+                  console.log(uploadFile['fileName'], uploadFile["uploaded"])
+                  this.$emit("uploadProgress", this.uploadFilesProgress)
                 }
               })
             },
           })
           .then(() => {
             console.log("File", fileLink["fileName"], "is uploaded");
-            this.uploadFilesProgress.splice(this.uploadFilesProgress.indexOf(fileLink["fileName"]),1)
+            this.uploadFilesProgress.splice(this.uploadFilesProgress.indexOf(fileLink["fileName"]), 1)
             this.$root.$emit("CheckFilesUpdates")
           });
       });
