@@ -21,7 +21,10 @@ var (
 func Run() {
 	initServer()
 	initializeRoutes()
-	router.Run(string(host + ":" + port))
+    err := router.Run(string(host + ":" + port))
+    if err != nil {
+        log.Default().Println(err)
+    }
 }
 
 func initServer() {

@@ -17,7 +17,7 @@
     <v-divider></v-divider>
 
     <v-list>
-      <v-list-item v-if="bucketList.length != 0">Доступные расчёты</v-list-item>
+      <v-list-item v-if="bucketList.length !== 0">Доступные расчёты</v-list-item>
       <v-list-item v-else>Здесь пока нет расчётов</v-list-item>
       <v-divider class="my-2"></v-divider>
       <v-list-item v-for="bucket in bucketList" link>
@@ -39,9 +39,6 @@
             </v-list-item-content>
           </v-col>
         </v-row>
-
-
-
       </v-list-item>
     </v-list>
     <v-spacer></v-spacer>

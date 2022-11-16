@@ -63,7 +63,7 @@ export default {
       await this.fileLinks.forEach((fileLink) => {
         let formdata = new FormData();
         this.uploadFiles.forEach((upFile) => {
-          if (fileLink["fileName"] == upFile["name"]) {
+          if (fileLink["fileName"] === upFile["name"]) {
             formdata.append("data", upFile);
           }
         });
@@ -76,7 +76,7 @@ export default {
           .put(fileLink["url"], formdata, {
             uploadProgress: (upProgress) => {
               this.uploadFilesProgress.forEach((uploadFile) => {
-                if (uploadFile["fileName"] == fileLink["fileName"]) {
+                if (uploadFile["fileName"] === fileLink["fileName"]) {
                   uploadFile['uploaded'] = Math.round(
                     (upProgress.loaded * 100) / upProgress.total
                   )
